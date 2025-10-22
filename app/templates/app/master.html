@@ -1,0 +1,1029 @@
+{% extends 'app/layouts/main.html' %}
+{% block title %}
+Master Data
+{% endblock title %}
+{% block content %}
+<style>
+    #box0{
+        height: 100%;
+        width: 100%;
+        
+        border: 2px solid black;
+        background-color:lightgrey;
+       
+    }
+    #box1{
+        height: 80%;
+        width:90%;
+        margin-top: 1%;
+        margin-left: 5%;
+        border: 2px solid black;
+        background-color:black;
+        border-radius: 5px;
+         display: flex;
+    justify-content: center; /* horizontally center */
+    align-items: center;     /* vertically center */
+    gap: 20px;               /* space between labels */
+    }
+
+
+ .inner-box-1, .inner-box-2,.inner-box-3{
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 2px solid #ccc;
+        text-align: center;
+        cursor: pointer;
+        font-weight: bold;
+       margin-bottom: 1%;
+        height: 90%;
+        width:25%;
+        font-weight: bold;
+        font-size: 1.5vw;
+  }
+
+
+
+
+
+    #box2{
+        height: 100%;
+        width: 90%;
+        margin-top: 2%;
+        margin-left: 5%;
+        border: 2px solid black;
+        background-color: #e6d2fc;
+    }
+    .box-1 {
+        display: flex;
+        gap: 10px; /* Space between labels */
+    }
+
+    body{
+        background-color: lightgrey;
+    }
+
+   
+    .item-1, .item-2, .item-3, .item-4{
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s; 
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+label {
+    display: inline-block;
+    width: 150px;
+    margin-top: 15px;
+    text-align: center;
+    margin-left: 20px;
+    font-weight: bold;
+    
+}
+select {
+    margin-top: 10px;
+    box-sizing: border-box;
+    width: 20%;
+    height: 20px;
+}
+
+
+   
+
+    
+        
+  /* Basic styling for the custom dropdown container */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+       /* Styling for the custom dropdown button */
+    .dropdown-button {
+        padding: 7px;
+        border: 1px solid #d1d1d1; /* Light gray border */
+        background-color: #f0f0f0; /* Mild gray background */
+        cursor: pointer;
+        width: 230px;
+    border: 1px solid black;
+}
+
+   .dropdown-button.green {
+            background-color: rgb(57, 248, 57);
+        }
+        .dropdown-button.red {
+            background-color: rgb(248, 68, 68);
+        }
+
+/* Styling for the dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #e3f2fd; /* Very light mild blue background */
+    border: 1px solid #10232b; /* Mild blue border */
+    z-index: 1;
+    width: 230px;
+    box-sizing: border-box;
+    color: black; /* Softer dark blue text color */
+}
+
+/* Styling for the input boxes inside the dropdown */
+.dropdown-content input {
+    width: calc(100% - 20px);
+    margin: 10px;
+    padding: 5px;
+    box-sizing: border-box;
+    background-color: #e1f5fe; /* Very light mild blue background for inputs */
+    border: 1px solid #81d4fa; /* Mild blue border for inputs */
+    color: #0277bd; /* Softer blue text color for inputs */
+}
+#cancel-btn{
+             background-color: red;
+             color:black;
+             height: 50px;
+             width: 150px;
+             margin-left: 10px;
+             margin-top: 30px;
+               
+         }
+#cancel-btn-2,#cancel-btn-3,#cancel-btn-4,#cancel-btn-5,#cancel-btn-6{
+    background-color: orange;
+    color:black;
+    height: 50px;
+    width: 150px;
+    margin-left: 10px;
+    margin-top: 30px;
+
+}
+
+#clear-btn{
+background-color: orange;
+    color:black;
+    height: 50px;
+    width: 150px;
+    margin-left: 65px;
+    margin-top: 30px;
+}
+#delete-btn{
+            background-color: red;
+             color:black;
+             height: 50px;
+             width: 150px;
+             margin-left: 65px;
+             margin-top: 30px;
+         }
+  #save-btn{
+      background-color: green;
+      color:black;           
+      height: 50px;
+      width: 150px; 
+      margin-left: 65px; 
+      margin-top: 30px;
+  }
+
+
+
+
+#notification {
+    display: none;
+    position: fixed;    
+    top: 50%;
+    left: 60%;
+    height: 120px;
+    width: 350px;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    z-index: 1000; 
+    border: 2px solid black;
+}
+
+.selected {
+        background-color:orange;
+    }
+    .no-outline{
+        border: none;
+        outline: none;
+    }    
+
+    
+</style>
+
+
+<div class="box-0" id="box0">
+    <div class="box-1" id="box1">
+        <label class="inner-box-1" id="probe_details"  onclick="enlargeItem(1),showItem('item-1')" >PROBE DETAILS</label>
+        <label class="inner-box-2" id="traceability" onclick="enlargeItem(2),showItem('item-2')" >TRACEABILITY</label>
+        <label class="inner-box-3" id="master" onclick="enlargeItem(3),showItem('item-3')" >MASTER DETAILS</label>
+        
+    </div>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+    <div class="box-2" id="box2" style="overflow-x: auto;overflow-y:auto;">
+
+        <div id="notification" style="display: none;"></div>
+        <div class="item item-1" id="item1">
+
+            <div style="display: flex; margin-top: -10px; margin-left: -20px; gap: 15px;">
+                   <label style="width: 250px;">
+    <input type="radio" name="group" value="1" id="lvdt_probe_trace_radio" onclick="toggleTables3()" checked>
+    LVDT PROBE TRACE
+</label>
+
+                    <label style="width: 250px;">
+                        <input type="radio" name="group" value="2" id="lvdt_probe_master_radio" onclick="toggleTables3()"> LVDT PROBE MASTER
+                    </label>
+            </div>
+
+
+           
+<div id="lvdt_probe_trace" style="display: block;">
+     <label for="tableBody-5" style="font-weight: bold; display: block; margin-left: 25%;font-size: 2vw;width: 50%;">LVDT PROBE TRACE</label>
+    <table border="1" style="margin-top: 10px; width: 100%;">
+        <thead>
+            <tr>
+                <th>SR.NO</th>
+                <th style="width: 25%;">MASTER NAME</th>
+                <th style="width: 10%;">ID.NO</th>
+                <th style="width: 22%;">CALIBRATION NUMBER</th>
+                <th style="width: 15%;">VALID UPTO</th>
+                <th style="width: 28%;">TRACEBILITY</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody-5">
+            {% for data in LVDTprobeTrace_value %}
+            <tr data-id="{{ data.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td><input type="text" value="{{ data.master_name }}" class="no-outline" style="width: 100%;"></td>
+                <td><input type="text" value="{{ data.id_no }}" class="no-outline" style="width: 100%;"></td>
+                <td><input type="text" value="{{ data.calibration_report_no }}" class="no-outline" style="width: 100%;"></td>
+                <td><input type="text" value="{{ data.valid_upto }}" class="no-outline" style="width: 100%;"></td>
+                <td><input type="text" value="{{ data.traceability }}" class="no-outline" style="width: 100%;"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <button onclick="addRow('lvdt_probe_trace', 6)">ADD NEW</button>
+    <div>
+        <a href="/index/">
+            <button type="button" id="cancel-btn-5"><b>CANCEL</b></button>
+        </a>
+        <button type="button" id="delete-btn" onclick="deleteSelectedRows('tableBody-5')"><b>DELETE</b></button>
+        <button type="submit" id="save-btn" onclick="saveData('lvdt_probe_trace')"><b>SAVE</b></button>
+    </div>
+</div>
+
+
+<!-- Table 6 -->
+<div id="lvdt_probe_master" style="display: none;" >
+     <label for="tableBody-5" style="font-weight: bold; display: block; margin-left: 25%;font-size: 2vw;width: 50%;">LVDT PROBE MASTER</label>
+    <table border="1" style="margin-top: 10px; width: 100%;">
+        <thead>
+            <tr>
+                <th style="width: 5%;">SR.NO</th>
+                <th style="width: 20%;" id="parameter_name">PARAMETER NAME</th>
+                <th style="width: 20%;" id="ref_size"> REF SIZE ON SETTING RING GAUGE</th>
+                
+            </tr>
+        </thead>
+        <tbody id="tableBody-6">
+            {% for data in LVDTprobeMaster_value %}
+            <tr data-id="{{ data.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td><input type="text" value="{{ data.parameter_name }}" class="no-outline" style="width: 100%;"></td>
+                <td><input type="text" value="{{ data.ref_size }}" class="no-outline" style="width: 100%;"></td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <button onclick="addRow('lvdt_probe_master', 3)">ADD NEW</button>
+    <div>
+        <a href="/index/">
+            <button type="button" id="cancel-btn-6"><b>CANCEL</b></button>
+        </a>
+        <button type="button" id="delete-btn" onclick="deleteSelectedRows('tableBody-6')"><b>DELETE</b></button>
+        <button type="submit" id="save-btn" onclick="saveData('lvdt_probe_master')"><b>SAVE</b></button>
+    </div>
+</div>
+
+        
+        </div>
+
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+<div class="item item-2" id="item2">
+    <div style="display: flex; margin-top: -10px; margin-left: -20px; gap: 15px;">
+        <label style="width: 250px;">
+            <input type="radio" name="group" value="1" id="setting_plug_trace_radio" onclick="toggleTables()"> SETTING PLUG TRACEBILITY
+        </label>
+        <label style="width: 250px;">
+            <input type="radio" name="group" value="2" id="setting_ring_trace_radio" onclick="toggleTables()"> SETTING RING TRACEBILITY
+        </label>
+    </div>
+
+    <div id="setting_plug_trace" style="display: block;">
+        <table border="1" style="margin-top: 10px;">
+            <thead>
+                <tr>
+                    <th>SR.NO</th>
+                    <th style="width: 25%;">MASTER NAME</th>
+                    <th style="width: 10%;">ID.NO</th>
+                    <th style="width: 22%;">CALIBRATION NUMBER</th>
+                    <th style="width: 15%;">VALID UPTO</th>
+                    <th style="width: 28%;">TRACEBILITY</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody-1">
+                {% for data in SettingPlugTrace_value%}
+                <tr data-id="{{ data.id }}">
+                    <td>{{ forloop.counter }}</td>
+                    <td><input type="text" value="{{ data.master_name }}" class="no-outline" style="width: 100%;"></td>
+                    <td><input type="text" value="{{ data.id_no }}" class="no-outline" style="width: 100%;"></td>
+                    <td><input type="text" value="{{ data.calibration_report_no }}" class="no-outline" style="width: 100%;"></td>
+                    <td><input type="text" value="{{ data.valid_upto }}" class="no-outline" style="width: 100%;"></td>
+                    <td><input type="text" value="{{ data.traceability }}" class="no-outline" style="width: 100%;"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <button onclick="addRow('setting_plug_trace', 6)">ADD NEW</button>
+        <div>
+            <a href="/index/">
+                <button type="button" id="cancel-btn-2"><b>CANCEL</b></button>
+            </a>
+            <button type="button" id="delete-btn" onclick="deleteSelectedRows('tableBody-1')"><b>DELETE</b></button>
+            <button type="submit" id="save-btn" onclick="saveData('setting_plug_trace')"><b>SAVE</b></button>
+        </div>
+    </div>
+
+    <div id="setting_ring_trace" style="display: none;">
+        <table border="1" style="margin-top: 10px;">
+            <thead>
+                <tr>
+                    <th>SR.NO</th>
+                    <th style="width: 25%;">MASTER NAME</th>
+                    <th style="width: 10%;">ID.NO</th>
+                    <th style="width: 22%;">CALIBRATION NUMBER</th>
+                    <th style="width: 15%;">VALID UPTO</th>
+                    <th style="width: 28%;">TRACEBILITY</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody-2">
+                {% for data in SettingRingTrace_value%}
+                <tr data-id="{{ data.id }}">
+                    <td>{{ forloop.counter }}</td>
+                    <td><input type="text" value="{{ data.master_name }}" class="no-outline" style="width: 100%;"></td>
+                    <td><input type="text" value="{{ data.id_no }}" class="no-outline" style="width: 100%;"></td>
+                    <td><input type="text" value="{{ data.calibration_report_no }}" class="no-outline" style="width: 100%;"></td>
+                    <td><input type="text" value="{{ data.valid_upto }}" class="no-outline" style="width: 100%;"></td>
+                    <td><input type="text" value="{{ data.traceability }}" class="no-outline" style="width: 100%;"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <button onclick="addRow('setting_ring_trace', 6)">ADD NEW</button>
+        <div>
+            <a href="/index/">
+                <button type="button" id="cancel-btn-2"><b>CANCEL</b></button>
+            </a>
+            <button type="button" id="delete-btn" onclick="deleteSelectedRows('tableBody-2')"><b>DELETE</b></button>
+            <button type="submit" id="save-btn" onclick="saveData('setting_ring_trace')"><b>SAVE</b></button>
+        </div>
+    </div>
+</div>
+
+
+<!-- //////////////////////////////////////////////////////////////////////////////////// -->
+
+        <div class="item item-3" id="item3">
+            <div style="display: flex; margin-top: -10px; margin-left: -20px; gap: 15px;">
+                <label style="width: 250px;">
+                    <input type="radio" name="group" value="1" id="setting_plug_master_radio" onclick="toggleTables2()" > SETTING PLUG MASTER
+                  </label>
+                  <label style="width: 250px;">
+                    <input type="radio" name="group" value="2" id="setting_ring_master_radio" onclick="toggleTables2()"> SETTING RING MASTER 
+                  </label>
+                </div>
+            <div id="setting_plug_master" style="display: none;">
+            <table border="1" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">SR.NO</th>
+                        <th style="width: 20%;" id="parameter_name">PARAMETER NAME</th>
+                        <th style="width: 20%;" id="ref_size"> REF SIZE ON SETTING RING GAUGE</th>
+                        <th style="width: 20%;" id="nominal">NOMINAL</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody-3">
+                    {% for data in SettingPlugMaster_value%}
+                    <tr data-id="{{ data.id }}">
+                        <td>{{ forloop.counter }}</td>
+                        <td><input type="text" value="{{ data.parameter_name }}" class="no-outline" style="width: 100%;"></td>
+                        <td><input type="text" value="{{ data.ref_size }}" class="no-outline" style="width: 100%;"></td>
+                        <td><input type="text" value="{{ data.nominal }}" class="no-outline" style="width: 100%;"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table><br>
+            <button onclick="addRow('setting_plug_master', 4)">ADD NEW</button>
+            <div>
+                <a href="/index/">
+                    <button type="button" id="cancel-btn-3"><b>CANCEL</b></button>
+                </a>
+                <button type="button" id="delete-btn" onclick="deleteSelectedRows('tableBody-3')"><b>DELETE</b></button>
+                <button type="submit" id="save-btn" onclick="saveData('setting_plug_master')"><b>SAVE</b></button>
+            </div>
+            </div>
+
+
+            <div id="setting_ring_master" style="display: none;">
+                <table border="1" style="margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">SR.NO</th>
+                            <th style="width: 20%;" id="parameter_name">PARAMETER NAME</th>
+                            <th style="width: 20%;" id="ref_size"> REF SIZE ON SETTING RING GAUGE</th>
+                            <th style="width: 20%;" id="nominal">NOMINAL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody-4">
+                        {% for data in SettingRingMaster_value%}
+                        <tr data-id="{{ data.id }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td><input type="text" value="{{ data.parameter_name }}" class="no-outline" style="width: 100%;"></td>
+                            <td><input type="text" value="{{ data.ref_size }}" class="no-outline" style="width: 100%;"></td>
+                            <td><input type="text" value="{{ data.nominal }}" class="no-outline" style="width: 100%;"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table><br>
+                <button onclick="addRow('setting_ring_master', 4)">ADD NEW</button>
+                <div>
+                    <a href="/index/">
+                        <button type="button" id="cancel-btn-3"><b>CANCEL</b></button>
+                    </a>
+                    <button type="button" id="delete-btn" onclick="deleteSelectedRows('tableBody-4')"><b>DELETE</b></button>
+                    <button type="submit" id="save-btn" onclick="saveData('setting_ring_master')"><b>SAVE</b></button>
+                </div>
+                </div>
+        </div>
+
+<!-- /////////////////////////////////////////////////////////////////////////////////////////// -->
+
+       
+    </div>     
+</div>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////// -->
+
+<script>
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+function toggleTables() {
+        // Get the radio button elements
+        var plugTrace = document.getElementById('setting_plug_trace_radio');
+        var ringTrace = document.getElementById('setting_ring_trace_radio');
+        
+        // Get the table div elements
+        var plugTable = document.getElementById('setting_plug_trace');
+        var ringTable = document.getElementById('setting_ring_trace');
+        
+        // Display the corresponding table based on the selected radio button
+        if (plugTrace.checked) {
+            plugTable.style.display = 'block';
+            ringTable.style.display = 'none';
+        } else if (ringTrace.checked) {
+            plugTable.style.display = 'none';
+            ringTable.style.display = 'block';
+        }
+    }
+
+    function toggleTables() {
+        const plugTraceDiv = document.getElementById('setting_plug_trace');
+        const ringTraceDiv = document.getElementById('setting_ring_trace');
+        
+        if (document.getElementById('setting_plug_trace_radio').checked) {
+            plugTraceDiv.style.display = 'block';
+            ringTraceDiv.style.display = 'none';
+        } else if (document.getElementById('setting_ring_trace_radio').checked) {
+            plugTraceDiv.style.display = 'none';
+            ringTraceDiv.style.display = 'block';
+        }
+    }
+    
+    // Call toggleTables initially to set the correct display
+    toggleTables();
+
+
+    function toggleTables2() {
+        // Get the radio button elements
+        var plugMaster = document.getElementById('setting_plug_master_radio');
+        var ringMaster = document.getElementById('setting_ring_master_radio');
+        
+        // Get the table div elements
+        var plugMasterTable = document.getElementById('setting_plug_master');
+        var ringMasterTable = document.getElementById('setting_ring_master');
+        
+        // Display the corresponding table based on the selected radio button
+        if (plugMaster.checked) {
+            plugMasterTable.style.display = 'block';
+            ringMasterTable.style.display = 'none';
+        } else if (ringMaster.checked) {
+            plugMasterTable.style.display = 'none';
+            ringMasterTable.style.display = 'block';
+        }
+    }
+    function toggleTables2() {
+        const plugMasterDiv = document.getElementById('setting_plug_master');
+        const ringMasterDiv = document.getElementById('setting_ring_master');
+        
+        if (document.getElementById('setting_plug_master_radio').checked) {
+            plugMasterDiv.style.display = 'block';
+            ringMasterDiv.style.display = 'none';
+        } else {
+            plugMasterDiv.style.display = 'none';
+            ringMasterDiv.style.display = 'block';
+        }
+    }   toggleTables2();
+
+
+
+   function toggleTables3() {
+    var probeTrace = document.getElementById('lvdt_probe_trace_radio');
+    var probeMaster = document.getElementById('lvdt_probe_master_radio');
+
+    var probeTraceTable = document.getElementById('lvdt_probe_trace');
+    var probeMasterTable = document.getElementById('lvdt_probe_master');
+
+    if (probeTrace.checked) {
+        probeTraceTable.style.display = 'block';
+        probeMasterTable.style.display = 'none';
+    } else if (probeMaster.checked) {
+        probeTraceTable.style.display = 'none';
+        probeMasterTable.style.display = 'block';
+    }
+}
+
+// run once on page load
+window.onload = toggleTables3;
+
+
+
+    function toggleTables3() {
+    const probeTraceDiv = document.getElementById('lvdt_probe_trace');
+    const probeMasterDiv = document.getElementById('lvdt_probe_master');
+
+    if (document.getElementById('lvdt_probe_trace_radio').checked) {
+        probeTraceDiv.style.display = 'block';
+        probeMasterDiv.style.display = 'none';
+    } else if (document.getElementById('lvdt_probe_master_radio').checked) {
+        probeTraceDiv.style.display = 'none';
+        probeMasterDiv.style.display = 'block';
+    }
+}
+
+// Run once on page load to show correct div
+toggleTables3();
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+   // Function to highlight and enlarge an item
+function enlargeItem(index) {
+    // Remove the highlight from all items
+    document.querySelectorAll('.box-1 > label').forEach(function (el) {
+        el.style.backgroundColor = '';  // Reset background color for all labels
+    });
+
+    // Highlight the clicked item
+    var clickedInnerBox = document.querySelector(`.box-1 .inner-box-${index}`);
+    if (clickedInnerBox) {
+        clickedInnerBox.style.backgroundColor = 'red';  // Highlight the clicked label
+    } else {
+        console.log('No inner-box found with index:', index);
+    }
+}
+
+// Function to display the selected item
+function showItem(itemClassName) {
+    // Hide all items
+    var itemClasses = document.querySelectorAll('.item');
+    itemClasses.forEach(function (item) {
+        item.style.display = 'none';  // Hide all items
+    });
+
+    // Show the selected item
+    var selectedItem = document.querySelector('.' + itemClassName);
+    if (selectedItem) {
+        selectedItem.style.display = 'block';  // Show the selected item
+    } else {
+        console.log('No item found with class:', itemClassName);
+    }
+}
+
+var rowData = {};
+
+function addRow(tableId, numColumns) {
+    var tableBody = document.querySelector('#' + tableId + ' tbody');
+    var newRow = tableBody.insertRow(tableBody.rows.length);
+
+    // Mark the row as new
+    newRow.setAttribute('data-new', 'true');
+
+    // Add click event to highlight the row on click
+    newRow.addEventListener('click', function(event) {
+        var rows = tableBody.querySelectorAll('tr');
+        rows.forEach(function(row) {
+            row.style.backgroundColor = '';  // Reset background color for all rows
+        });
+        event.currentTarget.style.backgroundColor = 'red';  // Set background color for the clicked row
+    });
+
+    for (var i = 0; i < numColumns; i++) {
+        var cell = newRow.insertCell(i);
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.style.width = '100%';
+        input.style.padding = '0';
+        input.style.border = 'none';
+        input.style.outline = 'none';
+        cell.appendChild(input);
+    }
+
+    // Initialize the rowData for the new row
+    if (!rowData[tableId]) {
+        rowData[tableId] = [];
+    }
+    rowData[tableId].push({
+        rowIndex: newRow.rowIndex,
+        values: Array.from(newRow.cells).map(cell => cell.querySelector('input').value)
+    });
+}
+
+
+
+
+window.onload = function () {
+    showItem('item-1');
+    document.querySelector('.box-1 .inner-box-1').style.backgroundColor = 'red';
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+// customer details script
+
+function toggleDropdown(id) {
+            var dropdownContent = document.getElementById('dropdown-content-' + id);
+            var dropdownButton = document.getElementById(id + '_btn');
+            if (dropdownContent.style.display === "none" || dropdownContent.style.display === "") {
+                dropdownContent.style.display = "block";
+            } else {
+                dropdownContent.style.display = "none";
+            }
+            // Update the button style based on the content
+            updateButtonStyle(id);
+        }
+
+        function updateButtonStyle(id) {
+            var dropdownButton = document.getElementById(id + '_btn');
+            var dropdownContent = document.getElementById('dropdown-content-' + id);
+            var inputs = dropdownContent.querySelectorAll('input');
+            var hasValue = Array.from(inputs).some(input => input.value.trim() !== '');
+
+            if (hasValue) {
+                dropdownButton.classList.add('green');
+                dropdownButton.classList.remove('red');
+            } else {
+                dropdownButton.classList.add('red');
+                dropdownButton.classList.remove('green');
+            }
+        }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+function saveData(formType) {
+    let formData = {};
+
+  if (formType === 'setting_plug_trace') {
+        let rows = document.getElementById('tableBody-1').getElementsByTagName('tr');
+        formData.rows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            let rowData = {
+                masterName: row.cells[1].innerText || row.cells[1].querySelector('input')?.value || '',
+                idNo: row.cells[2].innerText || row.cells[2].querySelector('input')?.value || '',
+                calibrationReportNo: row.cells[3].innerText || row.cells[3].querySelector('input')?.value || '',
+                validUpto: row.cells[4].innerText || row.cells[4].querySelector('input')?.value || '',
+                traceability: row.cells[5].innerText || row.cells[5].querySelector('input')?.value || '',
+                id: row.getAttribute('data-id') // Get the row ID if it exists
+            };
+            formData.rows.push(rowData);
+        }
+    }
+else if (formType === 'setting_ring_trace') {
+        // Collect setting_ring_trace table data
+        let rows = document.getElementById('tableBody-2').getElementsByTagName('tr');
+        formData.rows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+             
+            let rowData = {
+                masterName: row.cells[1].innerText|| row.cells[1].querySelector('input')?.value || '',
+                idNo: row.cells[2].innerText|| row.cells[2].querySelector('input')?.value || '',
+                calibrationReportNo: row.cells[3].innerText|| row.cells[3].querySelector('input')?.value || '',
+                validUpto: row.cells[4].innerText|| row.cells[4].querySelector('input')?.value || '',
+                traceability: row.cells[5].innerText|| row.cells[5].querySelector('input')?.value || '',
+                id: row.getAttribute('data-id') // Get the row ID if it exists
+            };
+            formData.rows.push(rowData);
+        }
+
+    } else if (formType === 'setting_plug_master') {
+        // Collect setting_plug_master table data
+        let rows = document.getElementById('tableBody-3').getElementsByTagName('tr');
+        formData.rows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+             // Check if the row is marked as new
+             
+            let rowData = {
+                parameterName: row.cells[1].innerText|| row.cells[1].querySelector('input')?.value || '',
+                refSize: row.cells[2].innerText|| row.cells[2].querySelector('input')?.value || '',
+                nominal: row.cells[3].innerText|| row.cells[3].querySelector('input')?.value || '',
+                id: row.getAttribute('data-id') // Get the row ID if it exists
+            };
+            formData.rows.push(rowData);
+        }
+
+    } else if (formType === 'setting_ring_master') {
+        // Collect setting_ring_master table data
+        let rows = document.getElementById('tableBody-4').getElementsByTagName('tr');
+        formData.rows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            
+            let rowData = {
+                parameterName: row.cells[1].innerText|| row.cells[1].querySelector('input')?.value || '',
+                refSize: row.cells[2].innerText|| row.cells[2].querySelector('input')?.value || '',
+                nominal: row.cells[3].innerText|| row.cells[3].querySelector('input')?.value || '',
+                id: row.getAttribute('data-id') // Get the row ID if it exists
+            };
+            formData.rows.push(rowData);
+        }
+
+    } 
+    else if (formType === 'lvdt_probe_trace') {
+        let rows = document.getElementById('tableBody-5').getElementsByTagName('tr');
+        formData.rows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            let rowData = {
+                masterName: row.cells[1].innerText || row.cells[1].querySelector('input')?.value || '',
+                idNo: row.cells[2].innerText || row.cells[2].querySelector('input')?.value || '',
+                calibrationReportNo: row.cells[3].innerText || row.cells[3].querySelector('input')?.value || '',
+                validUpto: row.cells[4].innerText || row.cells[4].querySelector('input')?.value || '',
+                traceability: row.cells[5].innerText || row.cells[5].querySelector('input')?.value || '',
+                id: row.getAttribute('data-id') // Get the row ID if it exists
+            };
+            formData.rows.push(rowData);
+        }
+    }
+     else if (formType === 'lvdt_probe_master') {
+        // Collect setting_ring_master table data
+        let rows = document.getElementById('tableBody-6').getElementsByTagName('tr');
+        formData.rows = [];
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            
+            let rowData = {
+                parameterName: row.cells[1].innerText|| row.cells[1].querySelector('input')?.value || '',
+                refSize: row.cells[2].innerText|| row.cells[2].querySelector('input')?.value || '',
+               
+                id: row.getAttribute('data-id') // Get the row ID if it exists
+            };
+            formData.rows.push(rowData);
+        }
+
+    } 
+
+    // Log the form data and type for debugging
+    console.log("formData", formData);
+    console.log("formType", formType);
+
+    // Send formData to the server
+    sendDataToServer(formData, formType);
+}
+const csrftoken = getCookie('csrftoken');
+// Function to send data to the server
+function sendDataToServer(formData, formType) {
+    fetch('/master/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken // Use Django's CSRF token if needed
+        },
+        body: JSON.stringify({
+            formType: formType,
+            formData: formData
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        showNotification('Data saved successfully', true); // Show success notification
+        // Handle any additional success logic if needed
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        showNotification('Error saving data: ' + error.message, false); // Show error notification
+    });
+}
+
+
+
+// Function to get the CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+// Function to handle row selection
+function handleRowSelection(event) {
+    var selectedRow = event.currentTarget;
+    var allRows = document.querySelectorAll('table tbody tr');
+
+    // Remove 'selected' class and background color for all rows
+    allRows.forEach(row => {
+        row.classList.remove('selected');
+    });
+
+    // Toggle 'selected' class for the clicked row and set its background color
+    selectedRow.classList.add('selected');
+}
+
+// Function to get form type based on the selected row
+function getFormTypeFromSelectedRow(selectedRow) {
+    // Assuming each table has a unique ID for form types
+    var tableId = selectedRow.closest('table').id;
+
+    switch (tableId) {
+        case 'tableBody-1':
+            return 'setting_plug_trace';
+        case 'tableBody-2':
+            return 'setting_ring_trace';
+        case 'tableBody-3':
+            return 'setting_plug_master';
+        case 'tableBody-4':
+            return 'setting_ring_master';
+       
+        default:
+            return null; // No form type detected
+    }
+}
+
+function deleteSelectedRows() {
+    var selectedRow = document.querySelector('.selected');
+    console.log("selectedRow", selectedRow);
+    
+    if (selectedRow) {
+        // Now you can proceed with deleting the row using AJAX
+        var tableBodyId = selectedRow.closest('tbody').id;
+        console.log('tableBodyId',tableBodyId);
+        var rowId = selectedRow.getAttribute('data-id');
+        console.log('rowId',rowId);
+
+        var dataToDelete = {};
+        dataToDelete[tableBodyId] = [parseInt(rowId)];
+
+        $.ajax({
+            type: 'DELETE',
+            url: '/master/',
+            data: JSON.stringify({
+                formType: tableBodyId,
+                idsToDelete: [parseInt(rowId)] // Send IDs to delete
+            }),
+            contentType: 'application/json',
+            success: function(response) {
+                console.log(response);
+                selectedRow.remove();
+                showNotification('Data deleted successfully', true); 
+            },
+            error: function(error) {
+                console.error('Error:', error);
+                showNotification('Error: Failed to delete data', false); 
+            }
+        });
+    } else {
+        // Inform the user that no row is selected
+        console.log('No row selected');
+        showNotification('No row selected', false); 
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var rows = document.querySelectorAll('table tbody tr');
+    rows.forEach(function (row) {
+        row.addEventListener('click', handleRowSelection);
+    });
+});
+
+
+
+  // Function to show a notification with an OK button
+  function showNotification(message, isSuccess) {
+    var notificationElement = document.getElementById('notification');
+    notificationElement.textContent = message;
+
+    if (isSuccess) {
+        notificationElement.style.backgroundColor = 'lightgreen';
+    } else {
+        notificationElement.style.backgroundColor = 'coral';
+    }
+
+    // Add an "OK" button to the notification
+    var okButton = document.createElement('button');
+    okButton.textContent = 'OK';
+    okButton.style.display = 'block';   // Make the button a block element
+    okButton.style.margin = 'auto';     // Center the button horizontally
+    okButton.style.marginTop = '10px';  // Add some top margin for spacing
+    okButton.style.padding = '10px';
+    okButton.style.height = '40px';     // Set the button height
+    okButton.style.width = '80px';      // Set the button width
+    okButton.style.border = 'none';     // Remove the default button border
+    okButton.style.backgroundColor = 'orangered'; // Red background color
+    okButton.style.color = 'white';     // White text color
+
+    // Add event listener to the OK button
+    okButton.addEventListener('click', function() {
+        // Redirect to the desired page (adjust the URL if needed)
+        window.location.href = '{% url "master" %}';
+
+        // Call clickBasedOnSessionStorage to simulate clicking the right box
+        clickBasedOnSessionStorage();
+    });
+
+    notificationElement.appendChild(okButton);
+
+    // Center the notification vertically and horizontally
+    notificationElement.style.display = 'flex';
+    notificationElement.style.flexDirection = 'column';
+    notificationElement.style.alignItems = 'center';
+    notificationElement.style.textAlign = 'center';
+    notificationElement.style.justifyContent = 'center';
+    notificationElement.style.top = '50%';
+    notificationElement.style.left = '50%';
+    notificationElement.style.transform = 'translate(-50%, -50%)';
+    notificationElement.style.zIndex = '1000';
+
+    // Display the notification
+    notificationElement.style.display = 'block';
+}
+
+
+window.addEventListener('DOMContentLoaded', (event) => {
+            var inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.setAttribute('autocomplete', 'off');
+            });
+        });
+
+
+
+</script>
+
+{% endblock content %}
